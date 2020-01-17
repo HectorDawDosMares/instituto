@@ -16,7 +16,7 @@ class AddForeignKeysToMateriasimpartidasTable extends Migration
         Schema::table('materiasimpartidas', function (Blueprint $table) {
             $table->foreign('docente')->references('id')->on('users');
             $table->foreign('grupo')->references('id')->on('grupos');
-            $table->foreign('materia')->references('id')->on('materia');
+            $table->foreign('materia')->references('id')->on('materias');
         });
     }
 
@@ -28,7 +28,7 @@ class AddForeignKeysToMateriasimpartidasTable extends Migration
     public function down()
     {
         Schema::table('materiasimpartidas', function (Blueprint $table) {
-            $table->dropForeign(['docente','grupo','materia']);
+            $table->dropForeign(['docente','grupo','materias']);
             /*
             $table->dropForeign('materiasimpartidas_docente_foreign');
             $table->dropForeign('materiasimpartidas_grupo_foreign');
