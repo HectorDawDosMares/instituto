@@ -99,7 +99,7 @@ class User extends Authenticatable
     public function isSuperAdmin() {
         return $this->email === config('app.superadmin_email');
     }
-    
+
     public function isCoordinadorCentro(Centro $centro = null)
     {
         return true;
@@ -107,7 +107,25 @@ class User extends Authenticatable
 
     public function isProfesorCentro(Centro $centro = null)
     {
-        return true;
+        //return true;
+        $rtn = false;
+        if(isNull($centro)) {
+            $this->isCoordinadorCentro() ? $rtn = true : false;
+            Materiaimpartida::where('docente',$this->id)->first() ? $rtn = true : false;
+        } else {
+            $centros = Centro::where('coordinador',$this->id);
+            foreach ($centros->coordinador as $idCoordinadores) {
+                $idCoordinadores == $this->id ? $rtn = true : false;
+            }
+
+            $materiasImpartidas = Materiaimpartida::where('docente',$this->id);
+            foreach ($materiasImpartidas as $materia) {
+                $materia->grupoObject()->anyoEscolarObject()->centro == $centro->id ? $rtn = true : false;
+            }
+
+        }
+
+        return $rtn;
     }
 
     public function isAlumnoCentro(Centro $centro = null)
